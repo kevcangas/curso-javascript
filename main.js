@@ -5,10 +5,13 @@ const mobileMenu = document.querySelector('.mobile-menu')
 const menuCarritoIcon = document.querySelector('.navbar-shopping-cart')
 const productDetail = document.querySelector('.product-detail')
 const cardsContainer = document.querySelector('.cards-container')
+const productDetailMain = document.querySelector('.product-detail-main')
+const productDetailCloseIcon = document.querySelector('.product-detail-close')
 
 menuEmail.addEventListener('click', toggleDesktopMenu)
 burguerMenuIcon.addEventListener('click', toggleMobileMenu)
 menuCarritoIcon.addEventListener('click', toggleCarrito)
+productDetailCloseIcon.addEventListener('click', closeProductDetailMain)
 
 function toggleDesktopMenu() {
     desktopMenu.classList.toggle('inactive')
@@ -18,14 +21,25 @@ function toggleDesktopMenu() {
 function toggleMobileMenu() {
     mobileMenu.classList.toggle('inactive')
     productDetail.classList.add('inactive')
+    productDetailMain.classList.add('inactive')
 }
 
 function toggleCarrito() {
     productDetail.classList.toggle('inactive')
     mobileMenu.classList.add('inactive')
     desktopMenu.classList.add('inactive')
+    productDetailMain.classList.add('inactive')
 }
 
+function openProductDetailMain() {
+    productDetailMain.classList.remove('inactive')
+    productDetail.classList.add('inactive')
+    mobileMenu.classList.add('inactive')
+}
+
+function closeProductDetailMain() {
+    productDetailMain.classList.add('inactive')
+}
 
 const productList = [];
 productList.push({
@@ -44,38 +58,43 @@ productList.push({
     img: 'https://m.media-amazon.com/images/I/61MS+ZiZWvL._AC_SX466_.jpg',
 })
 
-for (product of productList){
-    const productCard = document.createElement('div')
-    productCard.classList.add('product-card')
+function renderProducts(list){
+    for (product of list){
+        const productCard = document.createElement('div')
+        productCard.addEventListener('click', openProductDetailMain)
+        productCard.classList.add('product-card')
 
-    const img = document.createElement('img')
-    img.setAttribute('src', product.img)
+        const img = document.createElement('img')
+        img.setAttribute('src', product.img)
 
-    const productInfo = document.createElement('div')
-    productInfo.classList.add('product-info')
+        const productInfo = document.createElement('div')
+        productInfo.classList.add('product-info')
 
-    const productInfoDiv = document.createElement('div')
+        const productInfoDiv = document.createElement('div')
 
-    const productPrice = document.createElement('p')
-    productPrice.innerText = '$' + product.price.toString()
+        const productPrice = document.createElement('p')
+        productPrice.innerText = '$' + product.price.toString()
 
-    const productName = document.createElement('p')
-    productName.innerText = product.name
+        const productName = document.createElement('p')
+        productName.innerText = product.name
 
-    productInfoDiv.appendChild(productPrice)
-    productInfoDiv.appendChild(productName)
+        productInfoDiv.appendChild(productPrice)
+        productInfoDiv.appendChild(productName)
 
-    const productInfoFigure = document.createElement('figure')
-    const productImgCart = document.createElement('img')
-    productImgCart.setAttribute('src','./icons/bt_add_to_cart.svg')
-    
-    productInfoFigure.appendChild(productImgCart)
+        const productInfoFigure = document.createElement('figure')
+        const productImgCart = document.createElement('img')
+        productImgCart.setAttribute('src','./icons/bt_add_to_cart.svg')
+        
+        productInfoFigure.appendChild(productImgCart)
 
-    productInfo.appendChild(productInfoDiv)
-    productInfo.appendChild(productInfoFigure)
+        productInfo.appendChild(productInfoDiv)
+        productInfo.appendChild(productInfoFigure)
 
-    productCard.appendChild(img)
-    productCard.appendChild(productInfo)
+        productCard.appendChild(img)
+        productCard.appendChild(productInfo)
 
-    cardsContainer.appendChild(productCard)
+        cardsContainer.appendChild(productCard)
+    }
 }
+
+renderProducts(productList)
